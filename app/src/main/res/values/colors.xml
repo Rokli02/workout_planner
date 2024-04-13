@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="font_color_light">#FFF3FBFC</color>
+    <color name="font_color_dark">#FF000000</color>
+    <color name="font_color_pale">#FFA58384</color>
+    <color name="bg_color_primary">#FF5C0E22</color>
+    <color name="bg_color_secondary">#FF89222E</color>
+    <color name="bg_color_vibrant">#FFF92635</color>
+    <color name="bg_color_translucent_white_cover">#33FFFFFF</color>
+    <color name="bg_color_white_cover">#FFFFFFFF</color>
+    <color name="bg_color_translucent_black_cover">#33000000</color>
+</resources>

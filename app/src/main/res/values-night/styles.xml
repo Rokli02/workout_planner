@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Widget.Theme.WorkoutPlanner.MyView" parent="">
+        <item name="android:background">@color/bg_color_primary</item>
+        <item name="exampleColor">@color/bg_color_primary</item>
+    </style>
+</resources>
