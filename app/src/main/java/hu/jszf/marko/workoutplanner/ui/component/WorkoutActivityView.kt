@@ -1,7 +1,6 @@
 package hu.jszf.marko.workoutplanner.ui.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +25,6 @@ import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.WorkoutActivity
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
-import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorMisc
 import hu.jszf.marko.workoutplanner.ui.theme.RedSecondary

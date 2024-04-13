@@ -159,7 +159,7 @@ private fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: State
             }
 
             Spacer(Modifier.height(Dimensions.ElementGap))
-            InputField(label = "Név", formName, { formName = it }, Modifier.fillMaxWidth())
+            InputField(label = "Név", value = formName, onChange = { formName = it }, modifier = Modifier.fillMaxWidth())
 
             Spacer(Modifier.height(Dimensions.ElementGap))
             DatePickerField(label = "Időpont", value = formDate, onChange = { formDate = it })

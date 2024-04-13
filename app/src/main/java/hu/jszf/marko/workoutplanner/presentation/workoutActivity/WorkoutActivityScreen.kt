@@ -8,7 +8,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.WorkoutActivity
-import kotlinx.coroutines.launch
 
 @Composable
 fun WorkoutActivityScreen(workoutActivityId: Long) {

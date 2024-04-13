@@ -13,16 +13,13 @@ import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.theme.BlackTranslucent
 import hu.jszf.marko.workoutplanner.ui.theme.FailRedPrimary
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorMisc
-import hu.jszf.marko.workoutplanner.ui.theme.RedPrimary
 import hu.jszf.marko.workoutplanner.ui.theme.SuccessGreenPrimary
 import hu.jszf.marko.workoutplanner.ui.theme.SuccessGreenSecondary
 
@@ -89,7 +86,7 @@ fun SnackbarViewPreview() {
     Snackbar(
         snackbarData = object: SnackbarData{
             override val visuals: SnackbarVisuals = object: SnackbarVisuals {
-                override val actionLabel: String?
+                override val actionLabel: String
                     get() = "big action"
                 override val duration: SnackbarDuration
                     get() = SnackbarDuration.Indefinite

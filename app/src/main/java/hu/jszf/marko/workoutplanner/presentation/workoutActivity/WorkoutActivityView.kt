@@ -32,7 +32,6 @@ import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.WorkoutActivity
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
-import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.layout.BasicLayout
 import hu.jszf.marko.workoutplanner.ui.component.HorizontalLine

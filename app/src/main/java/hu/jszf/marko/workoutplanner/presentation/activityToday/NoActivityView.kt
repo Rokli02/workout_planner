@@ -17,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
-import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.layout.BasicLayout
 import hu.jszf.marko.workoutplanner.ui.component.CustomButton
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor

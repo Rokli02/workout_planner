@@ -1,6 +1,5 @@
 package hu.jszf.marko.workoutplanner.presentation.home
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
