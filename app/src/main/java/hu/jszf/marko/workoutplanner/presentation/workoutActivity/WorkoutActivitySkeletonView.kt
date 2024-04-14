@@ -53,7 +53,7 @@ fun WorkoutActivitySkeletonView() {
                 fillMaxSize()
                 .padding(
                     Dimensions.ScreenPaddigInline,
-                    16.dp,
+                    0.dp,
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

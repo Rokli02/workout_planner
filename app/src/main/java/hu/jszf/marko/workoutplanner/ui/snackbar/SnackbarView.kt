@@ -1,6 +1,5 @@
 package hu.jszf.marko.workoutplanner.ui.snackbar
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
@@ -12,10 +11,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
+import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.ui.theme.BlackTranslucent
 import hu.jszf.marko.workoutplanner.ui.theme.FailRedPrimary
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
@@ -23,10 +22,9 @@ import hu.jszf.marko.workoutplanner.ui.theme.FontColorMisc
 import hu.jszf.marko.workoutplanner.ui.theme.SuccessGreenPrimary
 import hu.jszf.marko.workoutplanner.ui.theme.SuccessGreenSecondary
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SnackbarView( content: @Composable (PaddingValues) -> Unit) {
-    val snackbarViewModel = viewModel<SnacbarViewModel>(factory = viewModelFactory { SnacbarViewModel })
+    val snackbarViewModel = WorkoutApplication.appModule.getSnackbarViewModel()
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -34,7 +32,9 @@ fun SnackbarView( content: @Composable (PaddingValues) -> Unit) {
             SnackbarHost(
                 hostState = snackbarViewModel.snackbarHostState,
                 snackbar = {
-                    val sbColors = when (snackbarViewModel.type.collectAsState().value) {
+                    val type by snackbarViewModel.type.collectAsState()
+
+                    val sbColors = when (type) {
                         SnackbarType.Default -> listOf(
                             SnackbarDefaults.color,
                             SnackbarDefaults.contentColor,

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +44,8 @@ fun InputField(
     onChange: (value: String) -> Unit,
     modifier: Modifier = Modifier,
     label: String? = null,
+    textStyle: TextStyle? = null
+    ,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -108,7 +111,7 @@ fun InputField(
             onValueChange = onChange,
             enabled = true,
             readOnly = false,
-            textStyle = LocalTextStyle.current,
+            textStyle = if (textStyle == null) LocalTextStyle.current else LocalTextStyle.current.merge(textStyle),
             cursorBrush = SolidColor(FontColorDark),
             visualTransformation = VisualTransformation.None,
             keyboardOptions = KeyboardOptions.Default,

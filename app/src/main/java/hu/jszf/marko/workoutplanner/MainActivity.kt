@@ -3,9 +3,12 @@ package hu.jszf.marko.workoutplanner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,16 +29,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            WorkoutApplication.appModule.globalVMStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+
             WorkoutPlannerTheme {
-                val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
-                val navController = rememberNavController()
-
-                navVM.updateNavController(navController)
-
                 SnackbarView {
+                    val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
+                    val navController = rememberNavController()
+
+                    navVM.updateNavController(navController)
                     NavHost(
                         navController = navController,
                         startDestination = Screen.HomeScreen.route,
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { ExitTransition.None },
                         modifier = Modifier
                             .fillMaxSize()
                             .background(RedPrimary)

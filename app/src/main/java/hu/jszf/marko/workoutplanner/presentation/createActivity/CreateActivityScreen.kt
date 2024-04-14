@@ -57,7 +57,6 @@ import hu.jszf.marko.workoutplanner.ui.component.CustomButton
 import hu.jszf.marko.workoutplanner.ui.component.DatePickerField
 import hu.jszf.marko.workoutplanner.ui.component.InputField
 import hu.jszf.marko.workoutplanner.ui.blockBorder
-import hu.jszf.marko.workoutplanner.ui.snackbar.SnacbarViewModel
 import hu.jszf.marko.workoutplanner.ui.snackbar.SnackbarType
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorDark
@@ -85,7 +84,7 @@ fun CreateActivityScreen(workoutActivityId: Long?) {
 @Composable
 private fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: State<Boolean>) {
     val createActivityVM = viewModel<CreateActivityViewModel>(factory = viewModelFactory { CreateActivityViewModel(WorkoutApplication.appModule.workoutActivityRepository) })
-    val snackbarViewModel = viewModel<SnacbarViewModel>(factory = viewModelFactory { SnacbarViewModel })
+    val snackbarViewModel = WorkoutApplication.appModule.getSnackbarViewModel()
     val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     val submitBtnText = if (isNew.value) "Létrehozás" else "Módosítás"
@@ -214,6 +213,9 @@ private fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: State
                         createActivityVM.create(_woActivity).also {
                             if (it) {
                                 snackbarViewModel.show("Hozzáadva", SnackbarType.Success)
+
+                                formName = ""
+                                formDate = Calendar.getInstance().timeInMillis
                             } else {
                                 snackbarViewModel.show("Nem sikerült létrehozni", SnackbarType.Fail)
                             }
@@ -228,9 +230,6 @@ private fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: State
                             }
                         }
                     }
-
-                    formName = ""
-                    formDate = Calendar.getInstance().timeInMillis
 
                     isSubmitBtnEnabled = true
                 }

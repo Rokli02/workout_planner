@@ -59,7 +59,6 @@ import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.blockBorder
 import hu.jszf.marko.workoutplanner.ui.component.WorkoutActivityView
-import hu.jszf.marko.workoutplanner.ui.snackbar.SnacbarViewModel
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorDark
 import hu.jszf.marko.workoutplanner.ui.theme.LogoLevelsRes
@@ -128,7 +127,7 @@ fun HomeScreen() {
 @Composable
 private fun HomeScreenView(lastActivities: State<List<WorkoutActivity>>) {
     val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
-    val snackbarViewModel = viewModel<SnacbarViewModel>(factory = viewModelFactory { SnacbarViewModel })
+    val snackbarViewModel = WorkoutApplication.appModule.getSnackbarViewModel()
 
     Box (modifier = Modifier
         .fillMaxSize()
