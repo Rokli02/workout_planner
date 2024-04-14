@@ -9,6 +9,7 @@ import androidx.room.Room
 import hu.jszf.marko.workoutplanner.db.WorkoutDatabase
 import hu.jszf.marko.workoutplanner.db.repository.WorkoutActivityRepository
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
+import hu.jszf.marko.workoutplanner.presentation.allActivity.AllActivityViewModel
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityViewModel
 import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.snackbar.SnacbarViewModel
@@ -19,6 +20,9 @@ interface AppModule {
     val workoutActivityRepository: WorkoutActivityRepository
     val navigatorViewModelFactory: ViewModelProvider.Factory
     val workoutActivityViewModelFactory: ViewModelProvider.Factory
+
+    @Composable
+    fun getAllActivityViewModel(): AllActivityViewModel
 
     @Composable
     fun getSnackbarViewModel(): SnacbarViewModel
@@ -34,7 +38,8 @@ class AppModuleImpl(
             "workout"
         ).build()
     }
-//        get() = WorkoutDatabase.getDatabase(appContext)
+
+    override lateinit var globalVMStoreOwner: ViewModelStoreOwner
 
     override val workoutActivityRepository: WorkoutActivityRepository by lazy {
         WorkoutActivityRepository(workoutDatabase.workoutActivityDao())
@@ -47,14 +52,13 @@ class AppModuleImpl(
     override val workoutActivityViewModelFactory: ViewModelProvider.Factory
         get() = viewModelFactory { WorkoutActivityViewModel(workoutActivityRepository) }
 
-    private val snackbarViewModelFactory: ViewModelProvider.Factory by lazy {
-        viewModelFactory { SnacbarViewModel() }
+    @Composable
+    override fun getAllActivityViewModel(): AllActivityViewModel {
+        return viewModel<AllActivityViewModel>(factory = viewModelFactory { AllActivityViewModel(workoutActivityRepository) })
     }
-
-    override lateinit var globalVMStoreOwner: ViewModelStoreOwner
 
     @Composable
     override fun getSnackbarViewModel(): SnacbarViewModel {
-        return viewModel<SnacbarViewModel>(viewModelStoreOwner = globalVMStoreOwner, key = "defaultSnacbarViewModel", factory = snackbarViewModelFactory)
+        return viewModel<SnacbarViewModel>(viewModelStoreOwner = globalVMStoreOwner, factory = viewModelFactory { SnacbarViewModel() })
     }
 }

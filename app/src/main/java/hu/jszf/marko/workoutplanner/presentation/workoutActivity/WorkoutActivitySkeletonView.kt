@@ -70,7 +70,7 @@ fun WorkoutActivitySkeletonView() {
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().clip(shape).background(bgColor).padding(0.dp, 4.dp, 0.dp, 4.dp))
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Black))
+            Box(modifier = Modifier.fillMaxWidth().height(Dimensions.BorderThickness).background(Color.Black))
             LazyColumn {
                 items(3) {
                     Spacer(modifier = Modifier.height(8.dp))

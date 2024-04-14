@@ -89,26 +89,32 @@ internal fun HomeView(lastActivities: List<WorkoutActivity>) {
                     )
                     .blockBorder(Dimensions.BorderThickness, FontColorDark)
             ) {
-                items(lastActivities.size) {
-                    WorkoutActivityView(
-                        workoutActivity = lastActivities[it],
-                        modifier = Modifier
-                            .height(96.dp)
-                            .padding(0.dp, 8.dp, 0.dp, 8.dp)
-                    )
-                }
+                if (lastActivities.isNotEmpty()) {
+                    items(lastActivities.size) {
+                        WorkoutActivityView(
+                            workoutActivity = lastActivities[it],
+                            modifier = Modifier
+                                .height(96.dp)
+                                .padding(0.dp, 8.dp, 0.dp, 8.dp)
+                        )
+                    }
 
-                item {
-                    Button(
-                        onClick = { snackbarViewModel.show("Összes gyakorlat megtekintése") },
-                        colors = ButtonDefaults.buttonColors(containerColor = RedVibrant, contentColor = FontColor),
-                        contentPadding = PaddingValues(
-                            horizontal = 12.dp,
-                            vertical = 0.dp,
-                        ),
-                        modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 16.dp)
-                    ) {
-                        Text(text = "Összes gyakorlat megtekintése")
+                    item {
+                        Button(
+                            onClick = { snackbarViewModel.show("Összes gyakorlat megtekintése") },
+                            colors = ButtonDefaults.buttonColors(containerColor = RedVibrant, contentColor = FontColor),
+                            contentPadding = PaddingValues(
+                                horizontal = 12.dp,
+                                vertical = 0.dp,
+                            ),
+                            modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 16.dp)
+                        ) {
+                            Text(text = "Összes gyakorlat megtekintése")
+                        }
+                    }
+                } else {
+                    item {
+                        Text("Még nincs felvett gyakorlatod, hozz létre egyet!")
                     }
                 }
             }
@@ -120,7 +126,9 @@ internal fun HomeView(lastActivities: List<WorkoutActivity>) {
                 .padding(12.dp, 4.dp)
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                      navVM.navController.navigate(Screen.AllWorkoutActivityScreen.route)
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = FontColorDark),
             ) {
                 Icon(Icons.Sharp.List, null, modifier = Modifier.size(32.dp))

@@ -1,5 +1,6 @@
 package hu.jszf.marko.workoutplanner.db.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,8 +9,8 @@ import hu.jszf.marko.workoutplanner.db.entity.WorkoutActivityEntity
 
 @Dao
 interface WorkoutActivityDao {
-    @Query("SELECT * FROM WorkoutActivityEntity WHERE name LIKE '%' || :filter ||'%' OR date LIKE '%' || :filter ||'%' ORDER BY date DESC LIMIT :size OFFSET :offset")
-    suspend fun findByFilterAndOffsetAndSize(filter: String?, offset: Int, size: Int): List<WorkoutActivityEntity>
+    @Query("SELECT * FROM WorkoutActivityEntity WHERE name LIKE '%' || :filter ||'%' OR date LIKE '%' || :filter ||'%' ORDER BY date DESC")
+    fun findByFilterPaged(filter: String): PagingSource<Int, WorkoutActivityEntity>
 
     @Query("SELECT * FROM WorkoutActivityEntity WHERE id = :id ORDER BY date DESC LIMIT 1")
     suspend fun findById(id: Long): WorkoutActivityEntity?

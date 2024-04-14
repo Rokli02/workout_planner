@@ -34,35 +34,6 @@ fun BasicLayout(
 ) {
     val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
-//    Box (
-//        modifier = modifier
-//            .fillMaxSize()
-//            .background(RedPrimary)
-//    ) {
-//        IconButton(
-//            onClick = {
-//                navVm.navController.popBackStack()
-//            }
-//        ) {
-//            Icon(
-//                imageVector = Icons.Rounded.KeyboardArrowLeft,
-//                contentDescription = null,
-//                tint = Color.Black,
-//                modifier = Modifier.size(Dimensions.IconSize)
-//            )
-//        }
-//
-//        extraIcons()
-//
-//        Column (
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(0.dp, 42.dp, 0.dp, 0.dp)
-//        ) {
-//            content()
-//        }
-//    }
-
     Scaffold (
         modifier = modifier
             .fillMaxSize()

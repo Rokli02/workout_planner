@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
 import hu.jszf.marko.workoutplanner.presentation.activityToday.ActivityTodayScreen
+import hu.jszf.marko.workoutplanner.presentation.allActivity.AllActivityScreen
 import hu.jszf.marko.workoutplanner.presentation.createActivity.CreateActivityScreen
 import hu.jszf.marko.workoutplanner.presentation.home.HomeScreen
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityScreen
@@ -72,6 +73,9 @@ class MainActivity : ComponentActivity() {
 
                                     0
                             } != 0) navController.navigate(Screen.HomeScreen.route)
+                        }
+                        composable(route = Screen.AllWorkoutActivityScreen.route) {
+                            AllActivityScreen()
                         }
                     }
                 }

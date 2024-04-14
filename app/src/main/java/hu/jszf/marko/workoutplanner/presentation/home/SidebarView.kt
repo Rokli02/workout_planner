@@ -29,7 +29,7 @@ internal fun SidebarView() {
                 Dimensions.ScreenPaddigBlock,
             )
     ) {
-            val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
+            val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -38,8 +38,8 @@ internal fun SidebarView() {
                     .padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)
                     .blockBorder(Dimensions.BorderThickness, Color.Black)
             ) {
-                CustomButton(text = "Mai Gyakorlataim", modifier = Modifier.padding(0.dp, Dimensions.HalfElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVm.navController.navigate(Screen.ActivityTodayScreen.route) }
-                CustomButton(text = "Edzés tervezés", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) { navVm.navController.navigate(Screen.CreateActivityScreen.route) }
+                CustomButton(text = "Mai Gyakorlataim", modifier = Modifier.padding(0.dp, Dimensions.HalfElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVM.navController.navigate(Screen.ActivityTodayScreen.route) }
+                CustomButton(text = "Edzés tervezés", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) { navVM.navController.navigate(Screen.CreateActivityScreen.route) }
             }
 
             Column (
@@ -50,7 +50,7 @@ internal fun SidebarView() {
                     .blockBorder(Dimensions.BorderThickness, Color.Black)
             ) {
                 CustomButton(text = "Új gyakorlat felvétel", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.HalfElementGap, 0.dp, Dimensions.QuarterElementGap)) {}
-                CustomButton(text = "Korábbi edzéseim", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.QuarterElementGap)) {}
+                CustomButton(text = "Korábbi edzéseim", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVM.navController.navigate(Screen.AllWorkoutActivityScreen.route) }
                 CustomButton(text = "Összes gyakorlat", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) {}
             }
         }
