@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.Room
 import hu.jszf.marko.workoutplanner.db.WorkoutDatabase
 import hu.jszf.marko.workoutplanner.db.repository.WorkoutActivityRepository
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
@@ -26,8 +27,14 @@ interface AppModule {
 class AppModuleImpl(
     private val appContext: Context
 ): AppModule {
-    override val workoutDatabase: WorkoutDatabase
-        get() = WorkoutDatabase.getDatabase(appContext)
+    override val workoutDatabase: WorkoutDatabase by lazy {
+        Room.databaseBuilder(
+            appContext.applicationContext,
+            WorkoutDatabase::class.java,
+            "workout"
+        ).build()
+    }
+//        get() = WorkoutDatabase.getDatabase(appContext)
 
     override val workoutActivityRepository: WorkoutActivityRepository by lazy {
         WorkoutActivityRepository(workoutDatabase.workoutActivityDao())

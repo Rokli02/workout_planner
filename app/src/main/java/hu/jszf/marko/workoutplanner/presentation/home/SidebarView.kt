@@ -1,11 +1,8 @@
 package hu.jszf.marko.workoutplanner.presentation.home
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,25 +17,18 @@ import hu.jszf.marko.workoutplanner.presentation.Screen
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.component.CustomButton
 import hu.jszf.marko.workoutplanner.ui.blockBorder
-import hu.jszf.marko.workoutplanner.ui.theme.RedPrimary
 
 @Composable
-fun SidebarView() {
-    Box (
+internal fun SidebarView() {
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(RedPrimary)
+            .padding(
+                Dimensions.ScreenPaddigInline,
+                Dimensions.ScreenPaddigBlock,
+            )
     ) {
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .offset(y = 42.dp)
-                .padding(
-                    Dimensions.ScreenPaddigInline,
-                    Dimensions.ScreenPaddigBlock,
-                )
-        ) {
             val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
             Column (
@@ -64,7 +54,6 @@ fun SidebarView() {
                 CustomButton(text = "Összes gyakorlat", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) {}
             }
         }
-    }
 }
 
 @Preview(showBackground = true)

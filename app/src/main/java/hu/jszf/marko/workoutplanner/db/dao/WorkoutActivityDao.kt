@@ -17,7 +17,7 @@ interface WorkoutActivityDao {
     @Query("SELECT * FROM WorkoutActivityEntity ORDER BY date DESC LIMIT :last")
     suspend fun findLast(last: Int): List<WorkoutActivityEntity>
 
-    @Query("SELECT DISTINCT * FROM WorkoutActivityEntity WHERE date = date('now') ORDER BY date DESC LIMIT 1")
+    @Query("SELECT * FROM WorkoutActivityEntity WHERE date = date('now') ORDER BY date DESC LIMIT 1")
     suspend fun findToday(): WorkoutActivityEntity?
 
     @Insert

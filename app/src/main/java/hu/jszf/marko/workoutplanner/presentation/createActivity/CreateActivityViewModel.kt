@@ -24,11 +24,7 @@ class CreateActivityViewModel(private val woActivityRepository: WorkoutActivityR
     }
 
     private suspend fun getById(id: Long): WorkoutActivity? {
-        val result = woActivityRepository.getById(id)
-
-        println("GetById: " + result.toString())
-
-        return result
+        return woActivityRepository.getById(id)
     }
 
     suspend fun create(woActivity: WorkoutActivity): Boolean {

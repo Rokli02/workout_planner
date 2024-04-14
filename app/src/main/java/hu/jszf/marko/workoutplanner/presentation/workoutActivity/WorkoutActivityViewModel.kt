@@ -12,4 +12,10 @@ class WorkoutActivityViewModel(private val workoutActivityRepository: WorkoutAct
     suspend fun getById(id: Long) {
         workoutActivity.update { workoutActivityRepository.getById(id) }
     }
+
+    suspend fun getTodaysActivity(): WorkoutActivity? {
+        val result = workoutActivityRepository.getToday()
+
+        return result
+    }
 }

@@ -14,8 +14,13 @@ class WorkoutActivityRepository(private val workoutActivityDao: WorkoutActivityD
         }
     }
 
+    suspend fun getToday(): WorkoutActivity? {
+        return workoutActivityDao.findToday()?.let {
+            WorkoutActivity.fromEntity(it)
+        }
+    }
+
     suspend fun save(workoutActivity: WorkoutActivity): Boolean {
-        println("workoutActivity: $workoutActivity")
         return try {
             workoutActivityDao.save(workoutActivity.toEntity())
 
