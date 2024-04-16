@@ -5,7 +5,10 @@ sealed class Screen(val route: String) {
     data object CreateActivityScreen : Screen("create_activity")
     data object ActivityTodayScreen : Screen("no_activity")
     data object WorkoutActivityScreen : Screen("wo_activity")
-    data object AllWorkoutActivityScreen : Screen("all_wo_activity")
+    data object AllActivityScreen : Screen("all_wo_activity")
+    data object CreateExerciseScreen : Screen("create_exercise")
+    data object AllExerciseScreen : Screen("all_exercise")
+    data object ExerciseScreen : Screen("exercise")
 
     fun getOptionalArgs(parameters: Map<String, Any?>): String {
         val sb = StringBuilder("?")

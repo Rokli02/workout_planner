@@ -12,7 +12,7 @@ interface WorkoutActivityDao {
     @Query("SELECT * FROM WorkoutActivityEntity WHERE name LIKE '%' || :filter ||'%' OR date LIKE '%' || :filter ||'%' ORDER BY date DESC")
     fun findByFilterPaged(filter: String): PagingSource<Int, WorkoutActivityEntity>
 
-    @Query("SELECT * FROM WorkoutActivityEntity WHERE id = :id ORDER BY date DESC LIMIT 1")
+    @Query("SELECT * FROM WorkoutActivityEntity WHERE id = :id LIMIT 1")
     suspend fun findById(id: Long): WorkoutActivityEntity?
 
     @Query("SELECT * FROM WorkoutActivityEntity ORDER BY date DESC LIMIT :last")
@@ -25,7 +25,7 @@ interface WorkoutActivityDao {
     suspend fun save(woActivity: WorkoutActivityEntity)
 
     @Query("DELETE FROM WorkoutActivityEntity WHERE id = :id")
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Long)
 
     @Update
     suspend fun update(woActivity: WorkoutActivityEntity)

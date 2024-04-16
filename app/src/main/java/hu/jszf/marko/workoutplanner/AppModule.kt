@@ -7,9 +7,13 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import hu.jszf.marko.workoutplanner.db.WorkoutDatabase
+import hu.jszf.marko.workoutplanner.db.repository.ExerciseRepository
 import hu.jszf.marko.workoutplanner.db.repository.WorkoutActivityRepository
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.allActivity.AllActivityViewModel
+import hu.jszf.marko.workoutplanner.presentation.allExercise.AllExerciseViewModel
+import hu.jszf.marko.workoutplanner.presentation.createExercise.CreateExerciseViewModel
+import hu.jszf.marko.workoutplanner.presentation.exercise.ExerciseViewModel
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityViewModel
 import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.snackbar.SnacbarViewModel
@@ -18,8 +22,18 @@ interface AppModule {
     var globalVMStoreOwner: ViewModelStoreOwner
     val workoutDatabase: WorkoutDatabase
     val workoutActivityRepository: WorkoutActivityRepository
+    val exerciseRepository: ExerciseRepository
     val navigatorViewModelFactory: ViewModelProvider.Factory
     val workoutActivityViewModelFactory: ViewModelProvider.Factory
+
+    @Composable
+    fun getExerciseViewModel(): ExerciseViewModel
+
+    @Composable
+    fun getAllExerciseViewModel(): AllExerciseViewModel
+
+    @Composable
+    fun getCreateExerciseViewModel(): CreateExerciseViewModel
 
     @Composable
     fun getAllActivityViewModel(): AllActivityViewModel
@@ -32,10 +46,10 @@ class AppModuleImpl(
     private val appContext: Context
 ): AppModule {
     override val workoutDatabase: WorkoutDatabase by lazy {
-        Room.databaseBuilder(
+        Room.inMemoryDatabaseBuilder(
             appContext.applicationContext,
             WorkoutDatabase::class.java,
-            "workout"
+//            "workout"
         ).build()
     }
 
@@ -45,12 +59,31 @@ class AppModuleImpl(
         WorkoutActivityRepository(workoutDatabase.workoutActivityDao())
     }
 
+    override val exerciseRepository: ExerciseRepository by lazy {
+        ExerciseRepository(workoutDatabase.exerciseDao())
+    }
+
     override val navigatorViewModelFactory: ViewModelProvider.Factory by lazy {
         viewModelFactory { NavigatorViewModel }
     }
 
     override val workoutActivityViewModelFactory: ViewModelProvider.Factory
         get() = viewModelFactory { WorkoutActivityViewModel(workoutActivityRepository) }
+
+    @Composable
+    override fun getExerciseViewModel(): ExerciseViewModel {
+        return viewModel<ExerciseViewModel>(factory = viewModelFactory { ExerciseViewModel(exerciseRepository) })
+    }
+
+    @Composable
+    override fun getAllExerciseViewModel(): AllExerciseViewModel {
+        return viewModel<AllExerciseViewModel>(factory = viewModelFactory { AllExerciseViewModel(exerciseRepository) })
+    }
+
+    @Composable
+    override fun getCreateExerciseViewModel(): CreateExerciseViewModel {
+        return viewModel<CreateExerciseViewModel>(factory = viewModelFactory { CreateExerciseViewModel(exerciseRepository) })
+    }
 
     @Composable
     override fun getAllActivityViewModel(): AllActivityViewModel {

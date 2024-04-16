@@ -30,6 +30,7 @@ import hu.jszf.marko.workoutplanner.ui.theme.RedPrimary
 fun BasicLayout(
     modifier: Modifier = Modifier,
     extraIcons: @Composable() (RowScope.() -> Unit) = {},
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
@@ -59,7 +60,8 @@ fun BasicLayout(
 
                 extraIcons()
             }
-        }
+        },
+        bottomBar = bottomBar,
     ) {
         Column (
             modifier = Modifier

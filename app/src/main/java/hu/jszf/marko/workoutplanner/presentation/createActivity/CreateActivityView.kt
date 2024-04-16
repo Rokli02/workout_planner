@@ -1,9 +1,7 @@
 package hu.jszf.marko.workoutplanner.presentation.createActivity
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
@@ -31,18 +28,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,15 +43,14 @@ import hu.jszf.marko.workoutplanner.ui.blockBorder
 import hu.jszf.marko.workoutplanner.ui.component.CustomButton
 import hu.jszf.marko.workoutplanner.ui.component.DatePickerField
 import hu.jszf.marko.workoutplanner.ui.component.InputField
+import hu.jszf.marko.workoutplanner.ui.component.PicPickerField
 import hu.jszf.marko.workoutplanner.ui.layout.BasicLayout
 import hu.jszf.marko.workoutplanner.ui.snackbar.SnackbarType
+import hu.jszf.marko.workoutplanner.ui.theme.ActivitiesRes
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorDark
-import hu.jszf.marko.workoutplanner.ui.theme.RedPrimary
-import hu.jszf.marko.workoutplanner.ui.theme.RedSecondary
 import hu.jszf.marko.workoutplanner.ui.theme.RedVibrant
 import hu.jszf.marko.workoutplanner.ui.theme.UnknownMuscleRes
-import hu.jszf.marko.workoutplanner.ui.theme.WhiteTranslucent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -79,13 +66,13 @@ internal fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: Stat
 
     var formName by rememberSaveable(inputs = arrayOf(woActivity.value?.name)) { mutableStateOf(woActivity.value?.name ?: "") }
     var formDate by rememberSaveable(inputs = arrayOf(woActivity.value?.date)) { mutableLongStateOf( woActivity.value?.date?.timeInMillis ?: Calendar.getInstance().timeInMillis) }
+    var formImg by rememberSaveable(inputs = arrayOf(woActivity.value?.imgId)) { mutableStateOf( woActivity.value?.imgId) }
 
     BasicLayout {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(RedPrimary)
                 .padding(Dimensions.ScreenPaddigInline, Dimensions.ScreenPaddigBlock)
         ) {
             Text(
@@ -98,52 +85,7 @@ internal fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: Stat
             )
 
             Spacer(modifier = Modifier.height(Dimensions.HalfElementGap))
-
-            val btnShape = RoundedCornerShape(8.dp)
-            Button(
-                onClick = { /*TODO: Ha nincs kép kiválasztva, default kép, különben a kiválasztott*/ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                contentPadding = PaddingValues(0.dp),
-                shape = btnShape,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(275.dp)
-                    .clip(btnShape)
-                    .background(WhiteTranslucent)
-                    .border(Dimensions.BorderThickness, RedSecondary, btnShape)
-            ) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Image(
-                        painter = painterResource(id = UnknownMuscleRes),
-                        contentDescription = "unknown_muscle_res",
-                        contentScale = ContentScale.FillBounds,
-                        alpha = 0.28f,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                    Text(
-                        text = "Kép hozzáadás",
-                        fontSize = 16.sp,
-                        style = TextStyle.Default.copy(
-                            color = FontColorDark,
-                            letterSpacing = TextUnit(.1f, TextUnitType.Sp),
-                            drawStyle = Stroke(
-                                width = 4f,
-                                miter = 4f,
-                                join = StrokeJoin.Round
-                            )
-                        ),
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                    Text(
-                        text = "Kép hozzáadás",
-                        fontSize = 16.sp,
-                        color = FontColor,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
+            PicPickerField(array = ActivitiesRes, valueId = formImg) { formImg = it }
 
             Spacer(Modifier.height(Dimensions.ElementGap))
             InputField(label = "Név", value = formName, onChange = { formName = it }, modifier = Modifier.fillMaxWidth())
@@ -161,14 +103,14 @@ internal fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: Stat
                 Spacer(Modifier.height(Dimensions.HalfElementGap))
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { /*TODO: add exercise picker dialog*/ },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     shape = CircleShape,
                     modifier = Modifier
                         .background(RedVibrant, CircleShape)
                         .border(1.dp, Color.Black, CircleShape)
-                        .size(36.dp)
+                        .size(Dimensions.IconSize)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
@@ -190,15 +132,16 @@ internal fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: Stat
             CustomButton(text = submitBtnText, enabled = isSubmitBtnEnabled) {
                 isSubmitBtnEnabled = false
 
-                coroutineScope.launch {
-                    val _woActivity = WorkoutActivity(
-                        id = woActivity.value?.id,
-                        name = formName,
-                        date = Calendar.getInstance().apply{ setTimeInMillis(formDate) },
-                    )
+                val formDataWOActivity = WorkoutActivity(
+                    id = woActivity.value?.id,
+                    name = formName,
+                    date = Calendar.getInstance().apply{ setTimeInMillis(formDate) },
+                    imgId = formImg ?: UnknownMuscleRes,
+                )
 
+                coroutineScope.launch {
                     if (isNew.value) {
-                        createActivityVM.create(_woActivity).also {
+                        createActivityVM.create(formDataWOActivity).also {
                             if (it) {
                                 snackbarViewModel.show("Hozzáadva", SnackbarType.Success)
 
@@ -209,7 +152,7 @@ internal fun CreateActivityView(woActivity: State<WorkoutActivity?>, isNew: Stat
                             }
                         }
                     } else {
-                        createActivityVM.update(_woActivity).also {
+                        createActivityVM.update(formDataWOActivity).also {
                             if (it) {
                                 snackbarViewModel.show("Sikeres módosítás", SnackbarType.Success)
                                 navVm.navController.popBackStack()

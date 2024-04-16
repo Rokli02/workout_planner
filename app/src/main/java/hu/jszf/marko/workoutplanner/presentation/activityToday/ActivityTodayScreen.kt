@@ -8,9 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import hu.jszf.marko.workoutplanner.WorkoutApplication
+import hu.jszf.marko.workoutplanner.presentation.Screen
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivitySkeletonView
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityView
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityViewModel
@@ -50,8 +53,8 @@ fun ActivityTodayScreen() {
     WorkoutActivityView(activityToday!!)
 }
 
-@Preview
-@Composable
-fun ActivityTodayPreview() {
-    ActivityTodayScreen()
+fun NavGraphBuilder.activityTodayScreenGraphComposable(navController: NavHostController) {
+    composable(Screen.ActivityTodayScreen.route) {
+        ActivityTodayScreen()
+    }
 }

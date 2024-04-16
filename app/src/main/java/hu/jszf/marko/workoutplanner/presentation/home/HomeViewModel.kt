@@ -6,10 +6,10 @@ import hu.jszf.marko.workoutplanner.model.WorkoutActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-private const val GetLastXWOActivity = 3
+internal const val GetLastXWOActivity = 3
 
 class HomeViewModel(private val activityRepository: WorkoutActivityRepository): ViewModel() {
-    var lastActivities: MutableStateFlow<List<WorkoutActivity>> = MutableStateFlow(listOf())
+    var lastActivities: MutableStateFlow<List<WorkoutActivity>?> = MutableStateFlow(null)
         private set
 
     suspend fun getLastActivities() {

@@ -1,12 +1,12 @@
 package hu.jszf.marko.workoutplanner.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import hu.jszf.marko.workoutplanner.db.dao.ExerciseDao
 import hu.jszf.marko.workoutplanner.db.dao.WorkoutActivityDao
+import hu.jszf.marko.workoutplanner.db.entity.ExerciseEntity
 import hu.jszf.marko.workoutplanner.db.entity.WorkoutActivityEntity
 import hu.jszf.marko.workoutplanner.utils.DateFormatter
 import java.util.Calendar
@@ -14,31 +14,15 @@ import java.util.Calendar
 @Database(
     version = 1,
     entities = [
-        WorkoutActivityEntity::class
+        WorkoutActivityEntity::class,
+        ExerciseEntity::class,
     ],
     exportSchema = false,
 )
 @TypeConverters(WorkoutConverter::class)
 abstract class WorkoutDatabase: RoomDatabase() {
     abstract fun workoutActivityDao(): WorkoutActivityDao
-
-    companion object {
-        @Volatile
-        private var Instance: WorkoutDatabase? = null
-
-        fun getDatabase(context: Context): WorkoutDatabase {
-            return Instance ?: synchronized(this) {
-                val _instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    WorkoutDatabase::class.java,
-                    "workout"
-                ).build()
-                Instance = _instance
-
-                _instance
-            }
-        }
-    }
+    abstract fun exerciseDao(): ExerciseDao
 }
 
 class WorkoutConverter {

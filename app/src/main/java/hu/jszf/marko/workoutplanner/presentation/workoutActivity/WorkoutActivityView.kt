@@ -54,7 +54,7 @@ fun WorkoutActivityView(workoutActivity: WorkoutActivity) {
                     imageVector = Icons.Outlined.Build,
                     contentDescription = "copy activity to another",
                     tint = Color.Black,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(Dimensions.IconSize)
                 )
             }
         }

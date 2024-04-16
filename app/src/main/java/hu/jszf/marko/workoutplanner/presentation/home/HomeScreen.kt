@@ -30,7 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import hu.jszf.marko.workoutplanner.WorkoutApplication
+import hu.jszf.marko.workoutplanner.presentation.Screen
 import hu.jszf.marko.workoutplanner.presentation.viewModelFactory
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 
@@ -91,11 +95,17 @@ fun HomeScreen() {
                 }
             } else {
                 Box(modifier = Modifier.padding(inheritedPadding)) {
-                    val lastActivities by homeViewModel.lastActivities.collectAsState(initial = listOf())
+                    val lastActivities by homeViewModel.lastActivities.collectAsState(initial = null)
 
                     HomeView(lastActivities)
                 }
             }
         }
+    }
+}
+
+fun NavGraphBuilder.homeScreenGraphComposable(navController: NavHostController) {
+    composable(Screen.HomeScreen.route) {
+        HomeScreen()
     }
 }

@@ -1,6 +1,5 @@
-package hu.jszf.marko.workoutplanner.presentation.allActivity
+package hu.jszf.marko.workoutplanner.presentation.allExercise
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,20 +26,20 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import hu.jszf.marko.workoutplanner.model.WorkoutActivity
+import hu.jszf.marko.workoutplanner.model.Exercise
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.component.CustomButton
+import hu.jszf.marko.workoutplanner.ui.component.ExerciseView
 import hu.jszf.marko.workoutplanner.ui.component.InputField
 import hu.jszf.marko.workoutplanner.ui.component.LoadingIndicator
-import hu.jszf.marko.workoutplanner.ui.component.WorkoutActivityView
 import hu.jszf.marko.workoutplanner.ui.layout.BasicLayout
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-internal fun AllActivityView(
+fun AllExerciseView(
     filter: String,
-    onChange: (filter: String) -> Unit,
-    workoutActivitiesLPI: LazyPagingItems<WorkoutActivity>
+    onChange: (String) -> Unit,
+    exercisesLPI: LazyPagingItems<Exercise>,
 ) {
     BasicLayout {
         Column (
@@ -51,42 +50,48 @@ internal fun AllActivityView(
             InputField(
                 value = filter,
                 onChange = onChange,
-                placeholder = { Text(text = "Keresés az aktivitások között") },
+                placeholder = { Text(text = "Keresés a gyakorlatok között") },
                 trailingIcon = { Icon(Icons.Rounded.Search, null) },
             )
 
             Spacer(modifier = Modifier.height(Dimensions.HalfElementGap))
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(Dimensions.BorderThickness)
-                .background(Color.Black))
-
-            LazyColumn (
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Green),
+                    .fillMaxWidth()
+                    .height(Dimensions.BorderThickness)
+                    .background(Color.Black)
+            )
+
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                when (workoutActivitiesLPI.loadState.refresh) {
+                when (exercisesLPI.loadState.refresh) {
                     LoadState.Loading -> {
                         item {
                             LoadingIndicator(modifier = Modifier.fillMaxWidth())
                         }
                     }
+
                     is LoadState.Error -> {
                         item {
                             CustomButton(content = {
-                                Icon(Icons.Rounded.Refresh, null, modifier = Modifier.fillMaxWidth())
+                                Icon(
+                                    Icons.Rounded.Refresh,
+                                    null,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }) {
-                                workoutActivitiesLPI.refresh()
+                                exercisesLPI.refresh()
                             }
                         }
                     }
+
                     is LoadState.NotLoading -> {
-                        if (workoutActivitiesLPI.itemCount < 1) {
+                        if (exercisesLPI.itemCount < 1) {
                             item {
                                 Text(
-                                    text = "Még nincs felvett aktivitásod, hozz létre egyet!",
+                                    text = "Még nincs felvett gyakorlatod, hozz létre egyet!",
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
@@ -95,17 +100,17 @@ internal fun AllActivityView(
                     }
                 }
                 items(
-                    count = workoutActivitiesLPI.itemCount,
-                    key = workoutActivitiesLPI.itemKey { it.id!! },
-                    contentType = workoutActivitiesLPI.itemContentType { "WorkoutActivities" }
+                    count = exercisesLPI.itemCount,
+                    key = exercisesLPI.itemKey { it.id!! },
+                    contentType = exercisesLPI.itemContentType { "Exercises" }
                 ) { index ->
-                    workoutActivitiesLPI[index]?.also {
+                    exercisesLPI[index]?.also {
                         Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(Dimensions.HalfElementGap)
                         )
-                        WorkoutActivityView(workoutActivity = it)
+                        ExerciseView(exercise = it)
                         Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -113,7 +118,7 @@ internal fun AllActivityView(
                         )
                     }
                 }
-                when (workoutActivitiesLPI.loadState.append) {
+                when (exercisesLPI.loadState.append) {
                     LoadState.Loading -> {
                         item {
                             LoadingIndicator(modifier = Modifier.fillMaxWidth())
@@ -123,12 +128,17 @@ internal fun AllActivityView(
                     is LoadState.Error -> {
                         item {
                             CustomButton(content = {
-                                Icon(Icons.Rounded.Refresh, null, modifier = Modifier.fillMaxWidth())
+                                Icon(
+                                    Icons.Rounded.Refresh,
+                                    null,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }) {
-                                workoutActivitiesLPI.retry()
+                                exercisesLPI.retry()
                             }
                         }
                     }
+
                     is LoadState.NotLoading -> Unit
                 }
             }
@@ -136,13 +146,12 @@ internal fun AllActivityView(
     }
 }
 
-@SuppressLint("FlowOperatorInvokedInComposition")
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun AllActivityViewPreview() {
-    AllActivityView(
-        filter = "mai",
+fun AllExerciseViewPreview() {
+    AllExerciseView(
+        filter = "Ez egy filter",
         onChange = {},
-        workoutActivitiesLPI = MutableStateFlow(PagingData.empty<WorkoutActivity>()).collectAsLazyPagingItems(),
+        exercisesLPI = MutableStateFlow(PagingData.empty<Exercise>()).collectAsLazyPagingItems()
     )
 }

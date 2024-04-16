@@ -49,9 +49,9 @@ internal fun SidebarView() {
                     .padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.QuarterElementGap)
                     .blockBorder(Dimensions.BorderThickness, Color.Black)
             ) {
-                CustomButton(text = "Új gyakorlat felvétel", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.HalfElementGap, 0.dp, Dimensions.QuarterElementGap)) {}
-                CustomButton(text = "Korábbi edzéseim", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVM.navController.navigate(Screen.AllWorkoutActivityScreen.route) }
-                CustomButton(text = "Összes gyakorlat", enabled = false, modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) {}
+                CustomButton(text = "Új gyakorlat felvétel", modifier = Modifier.padding(0.dp, Dimensions.HalfElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVM.navController.navigate(Screen.CreateExerciseScreen.route) }
+                CustomButton(text = "Korábbi edzéseim", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.QuarterElementGap)) { navVM.navController.navigate(Screen.AllActivityScreen.route) }
+                CustomButton(text = "Összes gyakorlat", modifier = Modifier.padding(0.dp, Dimensions.QuarterElementGap, 0.dp, Dimensions.HalfElementGap)) { navVM.navController.navigate(Screen.AllExerciseScreen.route) }
             }
         }
 }
