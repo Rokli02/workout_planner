@@ -6,6 +6,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import hu.jszf.marko.workoutplanner.db.dao.ExerciseDao
 import hu.jszf.marko.workoutplanner.db.dao.WorkoutActivityDao
+import hu.jszf.marko.workoutplanner.db.entity.ActivityExerciseJoinTable
 import hu.jszf.marko.workoutplanner.db.entity.ExerciseEntity
 import hu.jszf.marko.workoutplanner.db.entity.WorkoutActivityEntity
 import hu.jszf.marko.workoutplanner.utils.DateFormatter
@@ -16,6 +17,7 @@ import java.util.Calendar
     entities = [
         WorkoutActivityEntity::class,
         ExerciseEntity::class,
+        ActivityExerciseJoinTable::class
     ],
     exportSchema = false,
 )

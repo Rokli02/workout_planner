@@ -25,6 +25,10 @@ class ExerciseRepository(private val exerciseDao: ExerciseDao) {
         }
     }
 
+    suspend fun getByExerciseAndActivity(exerciseId: Long, activityId: Long): Exercise? {
+        return exerciseDao.findActivityExercise(exerciseId, activityId)?.let { Exercise.fromEntity(it) }
+    }
+
     suspend fun save(exercise: Exercise): Boolean {
         return try {
             exerciseDao.save(exercise.toEntity())
