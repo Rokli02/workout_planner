@@ -28,17 +28,18 @@ fun CustomButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     backgroundColor: Color = RedSecondary,
+    fontColor: Color = FontColor,
     onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor, contentColor = FontColor),
+        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor, contentColor = fontColor),
         modifier = modifier
     ) {
         Text(
-            text,
+            text = text,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             maxLines = 1,

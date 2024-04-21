@@ -25,6 +25,7 @@ import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.WorkoutActivity
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
+import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorMisc
 import hu.jszf.marko.workoutplanner.ui.theme.RedSecondary
@@ -32,7 +33,7 @@ import hu.jszf.marko.workoutplanner.utils.DateFormatter
 
 @Composable
 fun WorkoutActivityView(workoutActivity: WorkoutActivity, modifier: Modifier = Modifier) {
-    val roundedShape = RoundedCornerShape(8.dp)
+    val roundedShape = RoundedCornerShape(Dimensions.Roundness)
     val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     Surface(

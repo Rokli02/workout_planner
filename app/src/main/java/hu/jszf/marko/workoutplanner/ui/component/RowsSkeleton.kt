@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.theme.WhiteTranslucent
 
 @Composable
@@ -39,7 +40,7 @@ fun RowSkeleton(@SuppressLint("ModifierParameter") modifier: Modifier = Modifier
     )
 
     val bgColor = WhiteTranslucent.copy(alpha = opacityAnim)
-    val shape = RoundedCornerShape(8.dp)
+    val shape = RoundedCornerShape(Dimensions.Roundness)
 
     Spacer(modifier = Modifier.height(paddingBlock))
     Box(modifier = modifier.clip(shape).background(bgColor))

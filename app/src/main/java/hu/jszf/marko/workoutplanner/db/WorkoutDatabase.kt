@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import hu.jszf.marko.workoutplanner.db.dao.ActivityExerciseJoinTableDao
 import hu.jszf.marko.workoutplanner.db.dao.ExerciseDao
 import hu.jszf.marko.workoutplanner.db.dao.WorkoutActivityDao
 import hu.jszf.marko.workoutplanner.db.entity.ActivityExerciseJoinTable
@@ -13,7 +14,7 @@ import hu.jszf.marko.workoutplanner.utils.DateFormatter
 import java.util.Calendar
 
 @Database(
-    version = 1,
+    version = 3,
     entities = [
         WorkoutActivityEntity::class,
         ExerciseEntity::class,
@@ -25,6 +26,7 @@ import java.util.Calendar
 abstract class WorkoutDatabase: RoomDatabase() {
     abstract fun workoutActivityDao(): WorkoutActivityDao
     abstract fun exerciseDao(): ExerciseDao
+    abstract fun activityExerciseJoinTableDao(): ActivityExerciseJoinTableDao
 }
 
 class WorkoutConverter {

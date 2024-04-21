@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +34,7 @@ import hu.jszf.marko.workoutplanner.model.WorkoutActivity
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
 import hu.jszf.marko.workoutplanner.ui.Dimensions
+import hu.jszf.marko.workoutplanner.ui.component.ExerciseView
 import hu.jszf.marko.workoutplanner.ui.layout.BasicLayout
 import hu.jszf.marko.workoutplanner.ui.component.HorizontalLine
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
@@ -41,13 +44,13 @@ import hu.jszf.marko.workoutplanner.utils.DateFormatter
 
 @Composable
 fun WorkoutActivityView(workoutActivity: WorkoutActivity) {
-    val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
+    val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     BasicLayout (
         extraIcons = {
             IconButton(
                 onClick = {
-                    navVm.navController.navigate("${Screen.CreateActivityScreen.route}${Screen.CreateActivityScreen.getOptionalArgs(mapOf("workoutActivityId" to workoutActivity.id))}")
+                    navVM.navController.navigate("${Screen.CreateActivityScreen.route}${Screen.getOptionalArgs(mapOf("workoutActivityId" to workoutActivity.id))}")
                 },
             ) {
                 Icon(
@@ -77,7 +80,11 @@ fun WorkoutActivityView(workoutActivity: WorkoutActivity) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(275.dp)
-                        .border(Dimensions.BorderThickness, RedSecondary, RoundedCornerShape(8.dp))
+                        .border(
+                            Dimensions.BorderThickness,
+                            RedSecondary,
+                            RoundedCornerShape(Dimensions.Roundness)
+                        )
                 )
                 Text(
                     text = workoutActivity.name,
@@ -122,12 +129,24 @@ fun WorkoutActivityView(workoutActivity: WorkoutActivity) {
                 HorizontalLine(modifier = Modifier.padding(0.dp, 12.dp))
             }
 
-            items(count = 10) {
-                Text("$it list item")
+            if (workoutActivity.exercises == null || workoutActivity.exercises!!.isEmpty()) {
+                item {
+                    Text("Még nincsennek gyakorlatok fűzve az edzéstervhez!")
+                }
+            } else {
+                items (count = workoutActivity.exercises!!.size) { index ->
+                    workoutActivity.exercises!![index].also { exercise ->
+                        Spacer(modifier = Modifier.height(Dimensions.HalfElementGap))
+                        ExerciseView(exercise = exercise) {
+                            navVM.navController.navigate("${Screen.ExerciseScreen.route}/${exercise.id}${Screen.getOptionalArgs(mapOf("activityId" to workoutActivity.id))}")
+                        }
+                        Spacer(modifier = Modifier.height(Dimensions.HalfElementGap))
+                    }
+                }
             }
 
             item {
-                Text(text = "id: ${workoutActivity.id}", fontSize = 10.sp, fontWeight = FontWeight.Light, color = FontColorMisc)
+                Text(text = "id: ${workoutActivity.id}", fontSize = 10.sp, fontWeight = FontWeight.Light, color = FontColorMisc, textAlign = TextAlign.Center)
                 HorizontalLine(modifier = Modifier.padding(0.dp, 11 .dp), color = Color.Transparent)
             }
         }

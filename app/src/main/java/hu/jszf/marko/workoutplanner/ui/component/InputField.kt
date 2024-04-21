@@ -72,32 +72,9 @@ fun InputField(
         }
 
         val interactionSource = remember { MutableInteractionSource() }
-        val txtFieldShape = RoundedCornerShape(8.dp)
+        val txtFieldShape = RoundedCornerShape(Dimensions.Roundness)
 
         Spacer(Modifier.height(4.dp))
-
-//        BasicTextField(
-//            value = value,
-//            onValueChange = onChange,
-//            singleLine = lines == 1,
-//            minLines = lines,
-//            textStyle = TextStyle(
-//                color = FontColorDark,
-//                fontSize = 16.sp,
-//            ),
-//            interactionSource = interactionSource,
-//            cursorBrush = SolidColor(FontColorDark),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .defaultMinSize(
-//                    minHeight = 48.dp
-//                )
-//                .clip(txtFieldShape)
-//                .background(Color.White)
-//                .border(Dimensions.BorderThickness, RedSecondary, txtFieldShape)
-//                .align(Alignment.CenterHorizontally)
-//                .padding(12.dp, 12.dp),
-//        )
 
         BasicTextField(
             value = value,

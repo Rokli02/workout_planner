@@ -14,8 +14,6 @@ class WorkoutActivityViewModel(private val workoutActivityRepository: WorkoutAct
     }
 
     suspend fun getTodaysActivity(): WorkoutActivity? {
-        val result = workoutActivityRepository.getToday()
-
-        return result
+        return workoutActivityRepository.getToday()
     }
 }

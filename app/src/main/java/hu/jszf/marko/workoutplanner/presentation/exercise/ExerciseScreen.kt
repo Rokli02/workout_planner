@@ -5,31 +5,41 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import hu.jszf.marko.workoutplanner.WorkoutApplication
+import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
 
 @Composable
 fun ExerciseScreen(exerciseId: Long, activityId: Long?) {
     val exerciseVM = WorkoutApplication.appModule.getExerciseViewModel()
+    val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
     val crScope = rememberCoroutineScope()
 
     LaunchedEffect(crScope) {
-        println("exerciseId: $exerciseId and activityId: $activityId")
         exerciseVM.getExercise(exerciseId, activityId)
     }
 
     val exercise by exerciseVM.exercise.collectAsState()
 
-    if (exercise == null) {
-        return ExerciseSkeletonView()
+    if (exercise != null) {
+        return ExerciseView(
+            exercise = exercise!!,
+            modifyExercise = {
+                navVM.navController.navigate("${Screen.CreateExerciseScreen.route}${Screen.getOptionalArgs(mapOf("exerciseId" to exercise!!.id))}")
+            },
+            updateActivityExercise = { updatedExercise ->
+                exerciseVM.updateExercise(updatedExercise)
+            }
+        )
     }
 
-    return ExerciseView(exercise!!)
+    return ExerciseSkeletonView()
 }
 
 fun NavGraphBuilder.exerciseScreenGraphComposable(navController: NavHostController) {

@@ -12,6 +12,7 @@ import hu.jszf.marko.workoutplanner.db.repository.WorkoutActivityRepository
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.allActivity.AllActivityViewModel
 import hu.jszf.marko.workoutplanner.presentation.allExercise.AllExerciseViewModel
+import hu.jszf.marko.workoutplanner.presentation.createActivity.ExerciseSelectorViewModel
 import hu.jszf.marko.workoutplanner.presentation.createExercise.CreateExerciseViewModel
 import hu.jszf.marko.workoutplanner.presentation.exercise.ExerciseViewModel
 import hu.jszf.marko.workoutplanner.presentation.workoutActivity.WorkoutActivityViewModel
@@ -39,6 +40,9 @@ interface AppModule {
     fun getAllActivityViewModel(): AllActivityViewModel
 
     @Composable
+    fun getExerciseSelectorViewModel(): ExerciseSelectorViewModel
+
+    @Composable
     fun getSnackbarViewModel(): SnacbarViewModel
 }
 
@@ -46,21 +50,21 @@ class AppModuleImpl(
     private val appContext: Context
 ): AppModule {
     override val workoutDatabase: WorkoutDatabase by lazy {
-        Room.inMemoryDatabaseBuilder(
+        Room.databaseBuilder(
             appContext.applicationContext,
             WorkoutDatabase::class.java,
-//            "workout"
-        ).build()
+            "workout"
+        ).fallbackToDestructiveMigration().build()
     }
 
     override lateinit var globalVMStoreOwner: ViewModelStoreOwner
 
     override val workoutActivityRepository: WorkoutActivityRepository by lazy {
-        WorkoutActivityRepository(workoutDatabase.workoutActivityDao())
+        WorkoutActivityRepository(workoutDatabase.workoutActivityDao(), workoutDatabase.activityExerciseJoinTableDao())
     }
 
     override val exerciseRepository: ExerciseRepository by lazy {
-        ExerciseRepository(workoutDatabase.exerciseDao())
+        ExerciseRepository(workoutDatabase.exerciseDao(), workoutDatabase.activityExerciseJoinTableDao())
     }
 
     override val navigatorViewModelFactory: ViewModelProvider.Factory by lazy {
@@ -88,6 +92,13 @@ class AppModuleImpl(
     @Composable
     override fun getAllActivityViewModel(): AllActivityViewModel {
         return viewModel<AllActivityViewModel>(factory = viewModelFactory { AllActivityViewModel(workoutActivityRepository) })
+    }
+
+    @Composable
+    override fun getExerciseSelectorViewModel(): ExerciseSelectorViewModel {
+        return viewModel<ExerciseSelectorViewModel>(factory = viewModelFactory {
+            ExerciseSelectorViewModel(exerciseRepository)
+        })
     }
 
     @Composable

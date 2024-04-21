@@ -41,7 +41,7 @@ fun DatePickerField(label: String, value: Long, onChange: (value: Long) -> Unit)
         var isDatePickerOpen by remember {
             mutableStateOf(false)
         }
-        val txtFieldShape = RoundedCornerShape(8.dp)
+        val txtFieldShape = RoundedCornerShape(Dimensions.Roundness)
 
         Text(
             text = label,

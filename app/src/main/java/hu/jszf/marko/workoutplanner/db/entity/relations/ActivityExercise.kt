@@ -6,7 +6,7 @@ data class ActivityExercise(
     val name: String,
     val description: String,
     val imgId: Int? = null,
-    var sets: Int,
-    var reps: String?,
-    var weights: String?,
+    val sets: Int,
+    val reps: String?,
+    val weights: String?,
 )

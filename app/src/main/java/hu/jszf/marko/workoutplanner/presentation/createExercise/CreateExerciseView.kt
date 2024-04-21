@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.Exercise
 import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.component.CustomButton
@@ -33,15 +32,18 @@ import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import kotlinx.coroutines.launch
 
 @Composable
-fun CreateExerciseView(exercise: Exercise?) {
+fun CreateExerciseView(
+    exercise: Exercise?,
+    showSnackbar: (text: String, type: SnackbarType) -> Unit,
+    create: suspend (Exercise) -> Boolean,
+    modify: suspend (Exercise) -> Boolean,
+) {
     val isNew = exercise == null
-    val exerciseVM = WorkoutApplication.appModule.getCreateExerciseViewModel()
-    val snackbarVM = WorkoutApplication.appModule.getSnackbarViewModel()
     val submitBtnText = if (isNew) "Létrehozás" else "Módosítás"
 
-    var formName by rememberSaveable { mutableStateOf("") }
-    var formDescription by rememberSaveable { mutableStateOf("") }
-    var formImg by rememberSaveable { mutableStateOf<Int?>(null) }
+    var formName by rememberSaveable(inputs = arrayOf(exercise?.name)) { mutableStateOf(exercise?.name ?: "") }
+    var formDescription by rememberSaveable(inputs = arrayOf(exercise?.description)) { mutableStateOf(exercise?.description ?: "") }
+    var formImg by rememberSaveable(inputs = arrayOf(exercise?.imgId)) { mutableStateOf(exercise?.imgId) }
 
     BasicLayout (
         bottomBar = {
@@ -59,10 +61,15 @@ fun CreateExerciseView(exercise: Exercise?) {
                 val crScope = rememberCoroutineScope()
 
                 CustomButton(text = submitBtnText, enabled = isSubmitBtnEnabled) {
+                    if (formName.isBlank()) {
+                        showSnackbar("Kötelező nevet adni", SnackbarType.Fail)
+
+                        return@CustomButton
+                    }
+
                     isSubmitBtnEnabled = false
 
                     crScope.launch {
-                        Thread.sleep(1_000)
 
                         val formDataExercise = Exercise(
                             id = exercise?.id,
@@ -72,9 +79,9 @@ fun CreateExerciseView(exercise: Exercise?) {
                         )
 
                         if (isNew) {
-                            exerciseVM.create(formDataExercise).also {
+                            create(formDataExercise).also {
                                 if (it) {
-                                    snackbarVM.show("Sikeres gyakorlat felvétel", SnackbarType.Success)
+                                    showSnackbar("Sikeres gyakorlat felvétel", SnackbarType.Success)
 
                                     formImg = null
                                     formName = ""
@@ -83,17 +90,17 @@ fun CreateExerciseView(exercise: Exercise?) {
                                     return@also
                                 }
 
-                                snackbarVM.show("Sikertelen gyakorlat felvétel", SnackbarType.Fail)
+                                showSnackbar("Sikertelen gyakorlat felvétel", SnackbarType.Fail)
                             }
                         } else {
-                            exerciseVM.modify(formDataExercise).also {
+                            modify(formDataExercise).also {
                                 if (it) {
-                                    snackbarVM.show("Sikeres gyakorlat módosítás", SnackbarType.Success)
+                                    showSnackbar("Sikeres gyakorlat módosítás", SnackbarType.Success)
 
                                     return@also
                                 }
 
-                                snackbarVM.show("Sikertelen gyakorlat módosítás", SnackbarType.Fail)
+                                showSnackbar("Sikertelen gyakorlat módosítás", SnackbarType.Fail)
                             }
                         }
 
@@ -130,9 +137,13 @@ fun CreateExerciseView(exercise: Exercise?) {
     }
 }
 
-@Preview(showBackground = true
-)
+@Preview(showBackground = true)
 @Composable
 fun CreateExerciseViewPreview() {
-    CreateExerciseView(null)
+    CreateExerciseView(
+        exercise = null,
+        showSnackbar = { _, _ -> },
+        create = { true },
+        modify = { true },
+    )
 }

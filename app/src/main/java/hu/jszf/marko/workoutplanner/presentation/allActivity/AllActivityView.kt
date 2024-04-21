@@ -63,16 +63,29 @@ internal fun AllActivityView(
 
             LazyColumn (
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Green),
+                modifier = Modifier.fillMaxSize(),
             ) {
-                when (workoutActivitiesLPI.loadState.refresh) {
-                    LoadState.Loading -> {
-                        item {
-                            LoadingIndicator(modifier = Modifier.fillMaxWidth())
-                        }
+                items(
+                    count = workoutActivitiesLPI.itemCount,
+                    key = workoutActivitiesLPI.itemKey { it.id!! },
+                    contentType = workoutActivitiesLPI.itemContentType { "WorkoutActivities" }
+                ) { index ->
+                    workoutActivitiesLPI[index]?.also {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Dimensions.HalfElementGap)
+                        )
+                        WorkoutActivityView(workoutActivity = it)
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Dimensions.HalfElementGap)
+                        )
                     }
+                }
+                when (workoutActivitiesLPI.loadState.refresh) {
+                    LoadState.Loading -> Unit
                     is LoadState.Error -> {
                         item {
                             CustomButton(content = {
@@ -92,25 +105,6 @@ internal fun AllActivityView(
                                 )
                             }
                         }
-                    }
-                }
-                items(
-                    count = workoutActivitiesLPI.itemCount,
-                    key = workoutActivitiesLPI.itemKey { it.id!! },
-                    contentType = workoutActivitiesLPI.itemContentType { "WorkoutActivities" }
-                ) { index ->
-                    workoutActivitiesLPI[index]?.also {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(Dimensions.HalfElementGap)
-                        )
-                        WorkoutActivityView(workoutActivity = it)
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(Dimensions.HalfElementGap)
-                        )
                     }
                 }
                 when (workoutActivitiesLPI.loadState.append) {

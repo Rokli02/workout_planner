@@ -1,14 +1,17 @@
 package hu.jszf.marko.workoutplanner.model
 
+import android.os.Parcelable
 import hu.jszf.marko.workoutplanner.db.entity.ActivityExerciseJoinTable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ActivityExercise(
     val activityId: Long,
     val exerciseId: Long,
     var sets: Int,
     var reps: MutableList<Int>,
     var weights: MutableList<Int>,
-) {
+) : Parcelable {
     fun toEntity(): ActivityExerciseJoinTable {
         return ActivityExerciseJoinTable(
             activityId = activityId,

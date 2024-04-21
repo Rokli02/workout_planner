@@ -16,7 +16,6 @@ class CreateActivityViewModel(private val woActivityRepository: WorkoutActivityR
         if (id != null && id >= 0) {
             woActivity.update { this.getById(id) }
 
-            // isNew false || null
             if (woActivity.value == null || !woActivity.value!!.isNew) {
                 isNew.update { false }
             }
@@ -33,5 +32,9 @@ class CreateActivityViewModel(private val woActivityRepository: WorkoutActivityR
 
     suspend fun update(woActivity: WorkoutActivity): Boolean{
         return woActivityRepository.update(woActivity)
+    }
+
+    suspend fun delete(id: Long): Boolean {
+        return woActivityRepository.deleteById(id)
     }
 }

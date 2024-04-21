@@ -1,9 +1,12 @@
 package hu.jszf.marko.workoutplanner.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import hu.jszf.marko.workoutplanner.R
 import hu.jszf.marko.workoutplanner.db.entity.ExerciseEntity
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Exercise (
     val id: Long?,
     val name: String,
@@ -11,8 +14,7 @@ data class Exercise (
     @ColumnInfo(name = "img_id")
     val imgId: Int? = R.drawable.muscles_unknown,
     val activityExercise: ActivityExercise? = null,
-) {
-
+): Parcelable {
     fun toEntity(): ExerciseEntity  {
         return ExerciseEntity(
             id = id,

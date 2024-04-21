@@ -62,7 +62,7 @@ fun PicPickerField(array: Array<Int>, valueId: Int?, onClick: (newValueId: Int?)
     var isPickerDialogOpen by rememberSaveable {
         mutableStateOf(false)
     }
-    val roundedShape = RoundedCornerShape(8.dp)
+    val roundedShape = RoundedCornerShape(Dimensions.Roundness)
 
     if (isPickerDialogOpen) {
         Dialog(onDismissRequest = { isPickerDialogOpen = false }) {
@@ -171,7 +171,7 @@ fun PicPickerField(array: Array<Int>, valueId: Int?, onClick: (newValueId: Int?)
             modifier = Modifier.align(Alignment.Center)
         )
         IconButton(
-            onClick = { onClick(null) }, //TODO: maybe use 'UnknownMuscleRes' instead of 'null'
+            onClick = { onClick(null) },
             modifier = Modifier.align(Alignment.TopEnd),
             colors = IconButtonDefaults.iconButtonColors(contentColor = FontColor)
         ) {
@@ -183,8 +183,6 @@ fun PicPickerField(array: Array<Int>, valueId: Int?, onClick: (newValueId: Int?)
         }
     }
 }
-
-//TODO: Lower drawable pic resolution
 
 @Preview
 @Composable

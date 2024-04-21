@@ -12,24 +12,9 @@ class CreateExerciseViewModel(private val exerciseRepository: ExerciseRepository
     val exercise: StateFlow<Exercise?> = _exercise
 
     suspend fun getExerciseById(id: Long?) {
-        val emptyExercise = Exercise(
-            id = null,
-            name = "",
-            description = "",
-        )
+        if (id == null) return
 
-        if (id == null) {
-            _exercise.update { emptyExercise }
-
-            return
-        }
-
-        val result = exerciseRepository.getById(id)
-        if (result == null) {
-            _exercise.update { emptyExercise }
-
-            return
-        }
+        val result = exerciseRepository.getById(id) ?: return
 
         _exercise.update { result }
     }

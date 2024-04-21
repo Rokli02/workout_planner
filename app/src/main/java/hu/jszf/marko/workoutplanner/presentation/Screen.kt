@@ -10,13 +10,15 @@ sealed class Screen(val route: String) {
     data object AllExerciseScreen : Screen("all_exercise")
     data object ExerciseScreen : Screen("exercise")
 
-    fun getOptionalArgs(parameters: Map<String, Any?>): String {
-        val sb = StringBuilder("?")
+    companion object {
+        fun getOptionalArgs(parameters: Map<String, Any?>): String {
+            val sb = StringBuilder("?")
 
-        for ((key, value) in parameters) {
-            sb.append("$key=$value&")
+            for ((key, value) in parameters) {
+                sb.append("$key=$value&")
+            }
+
+            return sb.toString().trimEnd('&')
         }
-
-        return sb.toString().trimEnd('&')
     }
 }

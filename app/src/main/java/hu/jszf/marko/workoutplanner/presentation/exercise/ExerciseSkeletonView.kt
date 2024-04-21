@@ -54,7 +54,7 @@ fun ExerciseSkeletonView() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             val bgColor = WhiteTranslucent.copy(alpha = opacityAnim)
-            val shape = RoundedCornerShape(8.dp)
+            val shape = RoundedCornerShape(Dimensions.Roundness)
 
             Box(modifier = Modifier.fillMaxWidth().height(275.dp).clip(shape).background(bgColor))
             Spacer(modifier = Modifier.height(Dimensions.HalfElementGap))

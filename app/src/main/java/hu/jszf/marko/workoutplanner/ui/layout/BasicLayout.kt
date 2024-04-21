@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,36 +24,36 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
-import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.theme.RedPrimary
 
 @Composable
 fun BasicLayout(
     modifier: Modifier = Modifier,
-    extraIcons: @Composable() (RowScope.() -> Unit) = {},
+    extraIcons: @Composable (RowScope.() -> Unit) = {},
     bottomBar: @Composable () -> Unit = {},
-    content: @Composable() (ColumnScope.() -> Unit)
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
     val navVm = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     Scaffold (
+        containerColor = RedPrimary,
         modifier = modifier
             .fillMaxSize()
             .background(RedPrimary),
         topBar = {
             Row (
-                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 4.dp),
+                modifier = Modifier.padding(6.dp, 4.dp, 6.dp, 4.dp),
             ) {
                 IconButton(
                     onClick = {
                         navVm.navController.popBackStack()
-                    }
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = Color.Black),
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.KeyboardArrowLeft,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier.size(Dimensions.IconSize)
+                        contentDescription = "Back",
+                        modifier = Modifier.size(36.dp),
                     )
                 }
 
@@ -74,7 +75,7 @@ fun BasicLayout(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun BasicLayoutPreview() {
     BasicLayout {

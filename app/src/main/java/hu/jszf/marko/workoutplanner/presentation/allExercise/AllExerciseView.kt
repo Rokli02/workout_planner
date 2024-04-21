@@ -66,12 +66,27 @@ fun AllExerciseView(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                when (exercisesLPI.loadState.refresh) {
-                    LoadState.Loading -> {
-                        item {
-                            LoadingIndicator(modifier = Modifier.fillMaxWidth())
-                        }
+                items(
+                    count = exercisesLPI.itemCount,
+                    key = exercisesLPI.itemKey { it.id!! },
+                    contentType = exercisesLPI.itemContentType { "Exercises" }
+                ) { index ->
+                    exercisesLPI[index]?.also {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Dimensions.HalfElementGap)
+                        )
+                        ExerciseView(exercise = it)
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Dimensions.HalfElementGap)
+                        )
                     }
+                }
+                when (exercisesLPI.loadState.refresh) {
+                    LoadState.Loading -> Unit
 
                     is LoadState.Error -> {
                         item {
@@ -97,25 +112,6 @@ fun AllExerciseView(
                                 )
                             }
                         }
-                    }
-                }
-                items(
-                    count = exercisesLPI.itemCount,
-                    key = exercisesLPI.itemKey { it.id!! },
-                    contentType = exercisesLPI.itemContentType { "Exercises" }
-                ) { index ->
-                    exercisesLPI[index]?.also {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(Dimensions.HalfElementGap)
-                        )
-                        ExerciseView(exercise = it)
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(Dimensions.HalfElementGap)
-                        )
                     }
                 }
                 when (exercisesLPI.loadState.append) {

@@ -17,8 +17,4 @@ data class WorkoutActivityEntity(
     val date: Calendar,
     @ColumnInfo(name = "img_id")
     val imgId: Int? = null,
-    @ColumnInfo(name = "all_exercises", defaultValue = "0")
-    val allExercises: Int,
-    @ColumnInfo(name = "all_sets", defaultValue = "0")
-    val allSets: Int,
 )

@@ -11,5 +11,6 @@ object Dimensions {
     val QuarterElementGap = ElementGap / 4
     val BorderThickness = 2.dp
     val InputFieldLabelSize = 18.sp
-    val IconSize = 36.dp
+    val IconSize = 32.dp
+    val Roundness = 8.dp
 }

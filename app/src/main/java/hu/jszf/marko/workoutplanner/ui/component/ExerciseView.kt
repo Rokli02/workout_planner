@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,18 +29,19 @@ import hu.jszf.marko.workoutplanner.WorkoutApplication
 import hu.jszf.marko.workoutplanner.model.Exercise
 import hu.jszf.marko.workoutplanner.presentation.NavigatorViewModel
 import hu.jszf.marko.workoutplanner.presentation.Screen
+import hu.jszf.marko.workoutplanner.ui.Dimensions
 import hu.jszf.marko.workoutplanner.ui.theme.FontColor
 import hu.jszf.marko.workoutplanner.ui.theme.FontColorMisc
 import hu.jszf.marko.workoutplanner.ui.theme.RedSecondary
 import hu.jszf.marko.workoutplanner.ui.theme.UnknownMuscleRes
 
 @Composable
-fun ExerciseView(exercise: Exercise, modifier: Modifier = Modifier) {
-    val roundedShape = RoundedCornerShape(8.dp)
+fun ExerciseView(exercise: Exercise, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
+    val roundedShape = RoundedCornerShape(Dimensions.Roundness)
     val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     Surface(
-        onClick = { navVM.navController.navigate("${Screen.ExerciseScreen.route}/${exercise.id}") },
+        onClick = onClick ?: { navVM.navController.navigate("${Screen.ExerciseScreen.route}/${exercise.id}") },
         shape = roundedShape,
         color = RedSecondary,
         modifier = modifier
@@ -87,7 +90,7 @@ fun ExerciseView(exercise: Exercise, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = false)
 @Composable
 fun ExerciseViewPreview() {
     val exercise = Exercise(
@@ -96,5 +99,9 @@ fun ExerciseViewPreview() {
         description = "Egy viszonylag rövid leírűs, amit tisztázza, hogy miként kell a gyakorlatot rövid leírűs, amit tisztázza, hogy miként kell a gyakorlatot"
     )
 
-    ExerciseView(exercise)
+    ExerciseView(
+        exercise = exercise,
+        onClick = {},
+        modifier = Modifier.shadow(elevation = 4.dp, shape = RoundedCornerShape(Dimensions.Roundness), spotColor = Color.White)
+    )
 }
