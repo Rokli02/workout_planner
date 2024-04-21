@@ -26,4 +26,8 @@ class CreateExerciseViewModel(private val exerciseRepository: ExerciseRepository
     suspend fun create(exercise: Exercise): Boolean {
         return exerciseRepository.save(exercise)
     }
+
+    suspend fun delete(id: Long): Boolean {
+        return exerciseRepository.deleteById(id)
+    }
 }

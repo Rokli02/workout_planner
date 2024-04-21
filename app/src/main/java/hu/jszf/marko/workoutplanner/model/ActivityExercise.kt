@@ -23,16 +23,6 @@ data class ActivityExercise(
     }
 
     companion object {
-        fun fromEntity(activityExercise: ActivityExerciseJoinTable): ActivityExercise {
-            return ActivityExercise(
-                activityId = activityExercise.activityId,
-                exerciseId = activityExercise.exerciseId,
-                sets = activityExercise.sets,
-                reps = activityExercise.reps?.split(";")?.map { it.toInt() }?.toMutableList() ?: mutableListOf(),
-                weights = activityExercise.weights?.split(";")?.map { it.toInt() }?.toMutableList() ?: mutableListOf(),
-            )
-        }
-
         fun fromEntity(activityExercise: hu.jszf.marko.workoutplanner.db.entity.relations.ActivityExercise): ActivityExercise {
             return ActivityExercise(
                 activityId = activityExercise.activityId,

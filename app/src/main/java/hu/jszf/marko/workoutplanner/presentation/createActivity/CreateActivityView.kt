@@ -3,12 +3,16 @@ package hu.jszf.marko.workoutplanner.presentation.createActivity
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,17 +64,22 @@ import hu.jszf.marko.workoutplanner.ui.theme.UnknownMuscleRes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlin.math.max
+import kotlin.math.min
 
-// TODO: Lehessen törölni a gyakorlatokat
-//      removeExercise: List
-//      a hozzáadott már benne van a formExercises listában
+private const val MIN_DRAG_OFFSET = 0f
+private const val MAX_DRAG_OFFSET = -500f
+private const val ACTION_DRAG_VELOCITY = -750f
+private const val INVISIBLE_DRAG_OFFSET = -150f
+private const val INVISIBLE_DRAG_OFFSET_MULTIPLIER = -1/300f
+
 @SuppressLint("MutableCollectionMutableState") // Sajnálom hogy ehhez kellett folyamondom, már nincs más ötletem miként lehet ezt megcsinálni, de sajna időm sincs kideríteni
 @Composable
 internal fun CreateActivityView(
     woActivity: WorkoutActivity?,
     isNew: State<Boolean>,
-    create: suspend (WorkoutActivity) -> Boolean,
-    update: suspend (WorkoutActivity) -> Boolean,
+    create: suspend (WorkoutActivity, removables: MutableList<Long>) -> Boolean,
+    update: suspend (WorkoutActivity, removables: MutableList<Long>) -> Boolean,
     goBack: (route: String?) -> Unit,
     showSnackbar: (text: String, type: SnackbarType) -> Unit,
     delete: suspend (Long) -> Boolean,
@@ -81,7 +92,7 @@ internal fun CreateActivityView(
     var formExercises by rememberSaveable(inputs = arrayOf(woActivity?.exercises)) {
         mutableStateOf(mutableListOf<Exercise>().apply { addAll(woActivity?.exercises ?: listOf()) })
     }
-//    var formRemoveExercises = rememberSaveable { mutableListOf<Long>() }
+    val formRemoveExercises = rememberSaveable { mutableListOf<Long>() }
 
     var isSelectorDialogOpen by remember { mutableStateOf(false) }
     var isDeleteDialogOpen by remember { mutableStateOf(false) }
@@ -176,9 +187,37 @@ internal fun CreateActivityView(
             items(
                 count = formExercises.size,
                 key = { "${it}_${formExercises[it].id}" }
-            ) {
+            ) { index ->
                 Spacer(Modifier.height(Dimensions.HalfElementGap))
-                ExerciseView(exercise = formExercises[it]) {  }
+
+                var offsetX by remember { mutableFloatStateOf(0f) }
+                val draggableState = rememberDraggableState {
+                    offsetX = max(MAX_DRAG_OFFSET, min(MIN_DRAG_OFFSET, offsetX + (it / 3)))
+                }
+
+                val modifier = Modifier
+                    .offset(x = offsetX.dp)
+                    .draggable(
+                        state = draggableState,
+                        orientation = Orientation.Horizontal,
+                        onDragStopped = { velocity ->
+                            if (velocity <= ACTION_DRAG_VELOCITY || offsetX < INVISIBLE_DRAG_OFFSET) {
+                                formRemoveExercises.add(formExercises[index].id!!)
+                                formExercises = formExercises.filter { exercise ->
+                                    exercise.id != formExercises[index].id
+                                }.toMutableList()
+
+                                return@draggable
+                            }
+
+                            offsetX = 0f
+                        }
+                    )
+                    .alpha(1f - min(1f, offsetX * INVISIBLE_DRAG_OFFSET_MULTIPLIER))
+
+
+
+                ExerciseView(exercise = formExercises[index], modifier = modifier) {  }
                 Spacer(Modifier.height(Dimensions.HalfElementGap))
             }
 
@@ -238,19 +277,20 @@ internal fun CreateActivityView(
 
                     coroutineScope.launch {
                         if (isNew.value) {
-                            create(formDataWOActivity).also {
+                            create(formDataWOActivity, formRemoveExercises).also {
                                 if (it) {
                                     showSnackbar("Hozzáadva", SnackbarType.Success)
 
                                     formName = ""
                                     formDate = Calendar.getInstance().timeInMillis
                                     formExercises = mutableListOf()
+                                    formRemoveExercises.clear()
                                 } else {
                                     showSnackbar("Nem sikerült létrehozni", SnackbarType.Fail)
                                 }
                             }
                         } else {
-                            update(formDataWOActivity).also {
+                            update(formDataWOActivity, formRemoveExercises).also {
                                 if (it) {
                                     showSnackbar("Sikeres módosítás", SnackbarType.Success)
                                     goBack(null)
@@ -274,8 +314,8 @@ fun CreateActivityViewPreview() {
     CreateActivityView(
         woActivity = null,
         isNew = MutableStateFlow(false).collectAsState(),
-        create = { true },
-        update = { true },
+        create = {_, _ -> true },
+        update = {_, _ -> true },
         goBack = {},
         showSnackbar = { _, _ ->  },
         delete = { true }

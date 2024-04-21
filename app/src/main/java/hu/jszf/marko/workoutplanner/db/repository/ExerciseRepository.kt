@@ -80,4 +80,16 @@ class ExerciseRepository(
             false
         }
     }
+
+    suspend fun deleteById(id: Long): Boolean {
+        return try {
+            exerciseDao.deleteById(id)
+
+            true
+        } catch (re: RuntimeException) {
+            println("WorkoutActivityRepository deleteById($id) failed")
+
+            false
+        }
+    }
 }

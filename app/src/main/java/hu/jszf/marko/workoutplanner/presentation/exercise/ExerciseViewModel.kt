@@ -20,9 +20,7 @@ class ExerciseViewModel(private val exerciseRepository: ExerciseRepository): Vie
             return
         }
 
-        exerciseRepository.getById(exerciseId)?.also {
-            _exercise.update { it }
-        }
+        _exercise.update { exerciseRepository.getById(exerciseId) }
     }
 
     fun updateExercise(newExercise: Exercise) {

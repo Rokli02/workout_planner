@@ -42,7 +42,7 @@ class WorkoutActivityRepository(
         }
     }
 
-    suspend fun save(workoutActivity: WorkoutActivity): Boolean {
+    suspend fun save(workoutActivity: WorkoutActivity): Long? {
         return try {
             val activityId = workoutActivityDao.save(workoutActivity.toEntity())
 
@@ -50,11 +50,11 @@ class WorkoutActivityRepository(
                 insertActivityExercise(it, activityId)
             }
 
-            true
+            activityId
         } catch (e: RuntimeException) {
             println("WorkoutActivityRepository save($workoutActivity) failed")
 
-            false
+            null
         }
     }
 

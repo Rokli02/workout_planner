@@ -26,12 +26,26 @@ class CreateActivityViewModel(private val woActivityRepository: WorkoutActivityR
         return woActivityRepository.getById(id)
     }
 
-    suspend fun create(woActivity: WorkoutActivity): Boolean {
-        return woActivityRepository.save(woActivity)
+    suspend fun create(woActivity: WorkoutActivity, removables: MutableList<Long>): Boolean {
+        val saveResult = woActivityRepository.save(woActivity) ?: return false
+
+        val removedCount = woActivityRepository.removeActivityExercise(removables.map { Pair(saveResult, it) })
+        if (removedCount != removables.size) {
+            println("Not all activityExercises got removed!")
+        }
+
+        return true
     }
 
-    suspend fun update(woActivity: WorkoutActivity): Boolean{
-        return woActivityRepository.update(woActivity)
+    suspend fun update(woActivity: WorkoutActivity, removables: MutableList<Long>): Boolean{
+        if (!woActivityRepository.update(woActivity)) return false
+
+        val removedCount = woActivityRepository.removeActivityExercise(removables.map { Pair(woActivity.id!!, it) })
+        if (removedCount != removables.size) {
+            println("Not all activityExercises got removed!")
+        }
+
+        return true
     }
 
     suspend fun delete(id: Long): Boolean {
