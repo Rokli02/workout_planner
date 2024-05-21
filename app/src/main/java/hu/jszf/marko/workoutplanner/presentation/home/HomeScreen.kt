@@ -96,8 +96,9 @@ fun HomeScreen() {
             } else {
                 Box(modifier = Modifier.padding(inheritedPadding)) {
                     val lastActivities by homeViewModel.lastActivities.collectAsState(initial = null)
+                    val logoIndex by homeViewModel.logoLevelIndex.collectAsState(initial = 0)
 
-                    HomeView(lastActivities)
+                    HomeView(lastActivities, logoIndex)
                 }
             }
         }

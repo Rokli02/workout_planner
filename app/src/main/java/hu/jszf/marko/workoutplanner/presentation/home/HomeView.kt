@@ -52,7 +52,7 @@ import hu.jszf.marko.workoutplanner.ui.theme.RedVibrant
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-internal fun HomeView(lastActivities: List<WorkoutActivity>?) {
+internal fun HomeView(lastActivities: List<WorkoutActivity>?, logoLevelIndex: Int = 0) {
     val navVM = viewModel<NavigatorViewModel>(factory = WorkoutApplication.appModule.navigatorViewModelFactory)
 
     Scaffold (
@@ -115,7 +115,7 @@ internal fun HomeView(lastActivities: List<WorkoutActivity>?) {
             modifier = Modifier.padding(it)
         ) {
             Image(
-                painter = painterResource(id = LogoLevelsRes[0]),
+                painter = painterResource(id = LogoLevelsRes[logoLevelIndex]),
                 contentDescription = "workout logo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
